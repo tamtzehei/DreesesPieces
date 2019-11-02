@@ -3,10 +3,11 @@
 
 # <code>
 import azure.cognitiveservices.speech as speechsdk
+import time
 
 # Creates an instance of a speech config with specified subscription key and service region.
 # Replace with your own subscription key and service region (e.g., "westus").
-speech_key, service_region = "YourSubscriptionKey", "YourServiceRegion"
+speech_key, service_region = "ae06249641924ee8bfebd863b121f33c", "eastus"
 speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
 # Creates a recognizer with the given settings
@@ -21,7 +22,7 @@ print("Say something...")
 # Note: Since recognize_once() returns only a single utterance, it is suitable only for single
 # shot recognition like command or query. 
 # For long-running multi-utterance recognition, use start_continuous_recognition() instead.
-result = speech_recognizer.recognize_once()
+result = speech_recognizer.start_continuous_recognition()
 
 # Checks result.
 if result.reason == speechsdk.ResultReason.RecognizedSpeech:
