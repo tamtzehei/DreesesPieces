@@ -5,7 +5,7 @@ database = 'mockBanking'
 username = 'azureuser'
 password = 'Abc12345'
 userID = 10000
-driver= '{ODBC Driver 17 for SQL Server}'
+driver= '{ODBC Driver 13 for SQL Server}'
 cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
 
@@ -45,7 +45,7 @@ def deal_with_switch(command_type,command_string):
       # output "cannot withdraw more than you have"
       print("Cannot withdraw more than you have")
   elif (command_type=="transfer"):
-    cursor.execute('SELECT AccountNumber FROM accounts where UserID = ' + userID)
+    cursor.execute('SELECT AccountNumber FROM accounts where UserID = ' + str(userID))
     row = cursor.fetchone()
     amount = list_boii.pop(np.argmin(list_boii))
     transferTo = 0
@@ -90,5 +90,3 @@ def deal_with_switch(command_type,command_string):
     # output val[0] as account balance.
     print(str(val[0]))
   cursor.commit()
-
-deal_with_switch("balance", "check amount on account 10000")

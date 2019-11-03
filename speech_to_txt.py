@@ -7,6 +7,7 @@ import time
 
 import text_to_cmd
 import text_to_speech
+import SQLTest
 
 def process_cmds():
     # Creates an instance of a speech config with specified subscription key and service region.
@@ -47,12 +48,20 @@ def process_cmds():
                 
         player.save_audio(result.text)
         
+        c = text_to_cmd.return_command_type(result.text)
+        player.save_audio(c)
         
-        print(text_to_cmd.return_command_type(result.text))
-        #deal_with_switch(text_to_cmd.return_command_type(result.text),result.text)
-        player.save_audio("Action completed! Say quit to end.")
+        cmd_type = 'not a command'
+        
+        if (c=="cmd_type"):
+        #if result.text
+            break
+        else:
+            #SQLTest.deal_with_switch('balance', result.text)
+            SQLTest.deal_with_switch(c,result.text)
+            player.save_audio("Action completed! Say quit to end.")
                 
-        # TODO Add quit to commands        
+            # TODO Add quit to commands        
         if 'quit' in result.text.lower():
             flag = 0
             player.save_audio('Thank you for your business')

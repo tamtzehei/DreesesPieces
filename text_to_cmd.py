@@ -22,19 +22,15 @@ print('text_to_cmd 1')
 module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 # Import the Universal Sentence Encoder's TF Hub module
 embed = hub.Module(module_url)
-with open('D:\pickled_embed.pickle', 'wb') as f:
-    pickle.dump(embed, f)
 
-messages = [
-    "Deposit 5 dollars in account number 1117",
-    "How much money did I send to Joanna?",
-    "What is my Balance",
-    "Transfer 5 dollars from account 11117 to 11115"]
+messages = ["Withdraw $10 from account",
+            "Deposit $5 in account 10000", "Transfer $10 from account 10000 to account 10001"
+            ,"Balance for account 15000"]
 commands = [
     "withdraw",
     "deposit",
     "transfer",
-    "balance", "yes","no","not a command"]
+    "balance","not a command"]
 
 print('text_to_cmd 2')
 
@@ -57,8 +53,8 @@ def return_command_type(text):
         session.run(tf.tables_initializer())
         corr_matrix = run(session, similarity_input_placeholder, messages,
                similarity_message_encodings)
-    corr_matrix[len(messages)-1,len(messages)-1] = 0
+        corr_matrix[len(messages)-1,len(messages)-1] = 0
     if (np.amax(corr_matrix[:,len(messages)-1],axis = 0)>0.5):
         return commands[np.argmax(corr_matrix[:,len(messages)-1],axis = 0)]
     else:
-        return commands[commands.shape[0]]
+        return commands[len(commands)]
