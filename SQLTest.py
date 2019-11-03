@@ -1,5 +1,6 @@
 import pyodbc
 import numpy as np
+import text_to_speech
 server = 'mocksqlserver.database.windows.net'
 database = 'mockBanking'
 username = 'azureuser'
@@ -8,7 +9,14 @@ userID = 10000
 driver= '{ODBC Driver 13 for SQL Server}'
 cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
+player = text_to_speech.TextToSpeech()
+player.get_token()
 
+def get_auth(userID, password):
+    cursor.execute("SELECT * from users WHERE UserID=" + str(userID) + 'and Password= \'' + str(password) + '\'')
+    val = cursor.fetchone()
+    
+    return val
 
 def get_ints(text):
   for c in text:
@@ -129,12 +137,16 @@ def deal_with_switch(command_type,command_string):
         else:
           #output not enough balance to transfer  
           print("Not enough balance to transfer")  
-  elif (command_type =="balance"):
+ # elif (command_type =="balance"):
     # Query Deposit
+  player.save_audio('Your balance is here')
+  if(len(list_boii)>0):
     accountID = list_boii[0]
     cursor.execute('SELECT Balance from accounts where AccountNumber = ' + str(accountID))
     val = cursor.fetchone()
-    # output val[0] as account balance.
-    print(str(val[0]))
-  cursor.commit()
+        # output val[0] as account balance.
+    if (val != None):
+      print(str(val[0]))
+      player.save_audio('Your balance is ' + str(val[0]))
+      cursor.commit()
 

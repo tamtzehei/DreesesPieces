@@ -1,5 +1,5 @@
 # init cursor and stuff
-auth = True
+auth = False
 invalidUID = True
 invalidPW = True
 counter = 0

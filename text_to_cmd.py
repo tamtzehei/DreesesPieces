@@ -57,4 +57,4 @@ def return_command_type(text):
     if (np.amax(corr_matrix[:,len(messages)-1],axis = 0)>0.5):
         return commands[np.argmax(corr_matrix[:,len(messages)-1],axis = 0)]
     else:
-        return commands[len(commands)]
+        return commands[len(commands)-1]
