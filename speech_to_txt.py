@@ -6,12 +6,15 @@ import azure.cognitiveservices.speech as speechsdk
 import time
 
 import text_to_cmd
-
-print('herehererereerer')
+import text_to_speech
 
 def process_cmds():
     # Creates an instance of a speech config with specified subscription key and service region.
     # Replace with your own subscription key and service region (e.g., "westus").
+    
+    player = text_to_speech.TextToSpeech()
+    player.get_token()
+    
     speech_key, service_region = "ae06249641924ee8bfebd863b121f33c", "eastus"
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     
@@ -19,7 +22,8 @@ def process_cmds():
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
     
     flag = 1
-    
+    player.save_audio("Hello. Please state your member number and password.")
+
     # Starts speech recognition, and returns after a single utterance is recognized. The end of a
     # single utterance is determined by listening for silence at the end or until a maximum of 15
     # seconds of audio is processed.  The task returns the recognition text as result. 
@@ -27,7 +31,6 @@ def process_cmds():
     # shot recognition like command or query. 
     # For long-running multi-utterance recognition, use start_continuous_recognition() instead.
     while flag:
-        print("Say something...")
     
         result = speech_recognizer.recognize_once()
         
@@ -42,10 +45,15 @@ def process_cmds():
             if cancellation_details.reason == speechsdk.CancellationReason.Error:
                 print("Error details: {}".format(cancellation_details.error_details))
                 
+        player.save_audio(result.text)
+        
+        
         print(text_to_cmd.return_command_type(result.text))
+        #deal_with_switch(text_to_cmd.return_command_type(result.text),result.text)
+        player.save_audio("Action completed! Say quit to end.")
                 
         # TODO Add quit to commands        
-        if result.text.lower() == 'quit':
+        if 'quit' in result.text.lower():
             flag = 0
-            print('Thank you for your business')
+            player.save_audio('Thank you for your business')
 # </code>

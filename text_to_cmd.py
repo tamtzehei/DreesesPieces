@@ -15,15 +15,17 @@ import os
 import pandas as pd
 import re
 import seaborn as sns
+import pickle
 
 print('text_to_cmd 1')
 
 module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 # Import the Universal Sentence Encoder's TF Hub module
 embed = hub.Module(module_url)
+with open('D:\pickled_embed.pickle', 'wb') as f:
+    pickle.dump(embed, f)
 
 messages = [
-    "Bug dick dominick",
     "Deposit 5 dollars in account number 1117",
     "How much money did I send to Joanna?",
     "What is my Balance",
@@ -32,7 +34,7 @@ commands = [
     "withdraw",
     "deposit",
     "transfer",
-    "balance","not a command"]
+    "balance", "yes","no","not a command"]
 
 print('text_to_cmd 2')
 
@@ -56,4 +58,7 @@ def return_command_type(text):
         corr_matrix = run(session, similarity_input_placeholder, messages,
                similarity_message_encodings)
     corr_matrix[len(messages)-1,len(messages)-1] = 0
-    return commands[np.argmax(corr_matrix[:,len(messages)-1],axis = 0)]
+    if (np.amax(corr_matrix[:,len(messages)-1],axis = 0)>0.5):
+        return commands[np.argmax(corr_matrix[:,len(messages)-1],axis = 0)]
+    else:
+        return commands[commands.shape[0]]
