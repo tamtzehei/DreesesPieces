@@ -12,11 +12,14 @@ from xml.etree import ElementTree
 
 from playsound import playsound
 
+oid = 0
+
 class TextToSpeech(object):
     def __init__(self):
         self.subscription_key = 'ae06249641924ee8bfebd863b121f33c'
         self.access_token = None
         self.count = 0
+        self.oid = oid + 1
         
     def get_token(self):
         fetch_token_url = "https://eastus.api.cognitive.microsoft.com/sts/v1.0/issueToken"
@@ -47,7 +50,7 @@ class TextToSpeech(object):
     
         response = requests.post(constructed_url, headers=headers, data=body)
         if response.status_code == 200:
-            with open('sample' + str(self.count) + '.wav', 'wb') as audio:
+            with open('sample' + str(self.count) + str(self.oid) + '.wav', 'wb') as audio:
                 audio.write(response.content)
                 print("\nStatus code: " + str(response.status_code) +
                       "\nYour TTS is ready for playback.\n")
@@ -55,6 +58,6 @@ class TextToSpeech(object):
             print("\nStatus code: " + str(response.status_code) +
                   "\nSomething went wrong. Check your subscription key and headers.\n")
             
-        playsound('sample' + str(self.count) + '.wav')
+        playsound('sample' + str(self.count) + str(self.oid) + '.wav')
         
         self.count += 1

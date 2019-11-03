@@ -9,8 +9,8 @@ userID = 10000
 driver= '{ODBC Driver 13 for SQL Server}'
 cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
-player = text_to_speech.TextToSpeech()
-player.get_token()
+#player = text_to_speech.TextToSpeech()
+#player.get_token()
 
 def get_auth(userID, password):
     cursor.execute("SELECT * from users WHERE UserID=" + str(userID) + 'and Password= \'' + str(password) + '\'')
@@ -42,6 +42,7 @@ def deal_with_switch(command_type,command_string):
         cursor.execute('SELECT Balance FROM accounts where AccountNumber=' + str(userID))
         newbal = cursor.fetchone()
         print(newbal[0])
+      list_boii.append(accountID)
   elif (command_type =="withdraw"):
     accountID = list_boii.pop(np.argmax(np.asarray(list_boii)))
     amount = list_boii.pop(0)
@@ -56,6 +57,7 @@ def deal_with_switch(command_type,command_string):
     else:
       # output "cannot withdraw more than you have"
       print("Cannot withdraw more than you have")
+    list_boii.append(accountID)
   elif (command_type=="transfer"):
     cursor.execute('SELECT AccountNumber FROM accounts where UserID = ' + str(userID))
     row = cursor.fetchone()
@@ -95,6 +97,7 @@ def deal_with_switch(command_type,command_string):
       else:
         # output "cannot withdraw more than you have"
         print("Cannot withdraw more than you have")
+      list_boii.append(accountID)
   elif (command_type=="transfer"):
     if (len(list_boii) >= 3):
       cursor.execute('SELECT AccountNumber FROM accounts where UserID = ' + userID)
@@ -137,16 +140,20 @@ def deal_with_switch(command_type,command_string):
         else:
           #output not enough balance to transfer  
           print("Not enough balance to transfer")  
+    list_boii.append(accountID)
  # elif (command_type =="balance"):
     # Query Deposit
-  player.save_audio('Your balance is here')
-  if(len(list_boii)>0):
+  #player.save_audio('Your balance is here')
+  if(len(list_boii) != 0):
     accountID = list_boii[0]
     cursor.execute('SELECT Balance from accounts where AccountNumber = ' + str(accountID))
     val = cursor.fetchone()
         # output val[0] as account balance.
     if (val != None):
       print(str(val[0]))
-      player.save_audio('Your balance is ' + str(val[0]))
+      
       cursor.commit()
+      return '"Action completed! Your balance is ' + str(val[0])
+  
+  return 'Could not interpret command'
 

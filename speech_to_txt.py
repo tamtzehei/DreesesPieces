@@ -116,17 +116,18 @@ def process_cmds():
         player.save_audio(result.text)
         
         c = text_to_cmd.return_command_type(result.text)
-        player.save_audio(c)
+        #player.save_audio(c)
         
         cmd_type = 'not a command'
         
         if (c=="cmd_type"):
         #if result.text
-            break
+            #player.save_audio('Could not interpret command')
+            continue
         else:
             #SQLTest.deal_with_switch('balance', result.text)
-            SQLTest.deal_with_switch(c,result.text)
-            player.save_audio("Action completed! Say quit to end.")
+            player.save_audio(SQLTest.deal_with_switch(c,result.text))
+            player.save_audio("Say quit, to,  end.")
                 
             # TODO Add quit to commands        
        
