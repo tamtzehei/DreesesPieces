@@ -25,7 +25,7 @@ def process_cmds():
     
     flag = 1
     
-    auth = False
+    auth = True
     invalidUID = True
     invalidPW = True
     counter = 0
@@ -127,7 +127,7 @@ def process_cmds():
         else:
             #SQLTest.deal_with_switch('balance', result.text)
             player.save_audio(SQLTest.deal_with_switch(c,result.text))
-            player.save_audio("Say quit, to,  end.")
+            player.save_audio("Say quit, to, end.")
                 
             # TODO Add quit to commands        
        

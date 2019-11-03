@@ -1,6 +1,7 @@
 import pyodbc
 import numpy as np
 import text_to_speech
+import re
 server = 'mocksqlserver.database.windows.net'
 database = 'mockBanking'
 username = 'azureuser'
@@ -140,10 +141,10 @@ def deal_with_switch(command_type,command_string):
         else:
           #output not enough balance to transfer  
           print("Not enough balance to transfer")  
-    list_boii.append(accountID)
+        list_boii.append(accountID)
  # elif (command_type =="balance"):
     # Query Deposit
-  #player.save_audio('Your balance is here')
+  cursor.commit()
   if(len(list_boii) != 0):
     accountID = list_boii[0]
     cursor.execute('SELECT Balance from accounts where AccountNumber = ' + str(accountID))
@@ -152,8 +153,6 @@ def deal_with_switch(command_type,command_string):
     if (val != None):
       print(str(val[0]))
       
-      cursor.commit()
-      return '"Action completed! Your balance is ' + str(val[0])
+      return "Your balance is " + str(val[0])
   
-  return 'Could not interpret command'
-
+  return "Could not interpret command"
