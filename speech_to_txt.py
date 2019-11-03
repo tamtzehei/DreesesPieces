@@ -5,6 +5,10 @@
 import azure.cognitiveservices.speech as speechsdk
 import time
 
+import text_to_cmd
+
+print('herehererereerer')
+
 def process_cmds():
     # Creates an instance of a speech config with specified subscription key and service region.
     # Replace with your own subscription key and service region (e.g., "westus").
@@ -37,6 +41,8 @@ def process_cmds():
             print("Speech Recognition canceled: {}".format(cancellation_details.reason))
             if cancellation_details.reason == speechsdk.CancellationReason.Error:
                 print("Error details: {}".format(cancellation_details.error_details))
+                
+        print(text_to_cmd.return_command_type(result.text))
                 
         # TODO Add quit to commands        
         if result.text.lower() == 'quit':
